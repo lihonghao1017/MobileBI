@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/boarding_list_item_click_style"
+    android:orientation="horizontal">
+
+    <CheckBox
+        android:id="@+id/cb_contacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/check_box_bg"
+        android:gravity="center_vertical"
+        android:layout_margin="11dp"
+        android:button="@null"
+        android:focusable="false" />
+
+    <TextView
+        android:id="@+id/tv_contacts_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dip"
+        android:singleLine="true"
+        android:text="you"
+        android:textColor="#2D414E"
+        android:textSize="18sp" />
+
+</LinearLayout>
