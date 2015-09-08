@@ -26,6 +26,7 @@ public class AnalysisActivity extends FragmentActivity implements
 		OnClickListener {
 	private FragmentManager fm;
 	private FragmentTransaction ft;
+	
 	private FrameLayout container;
 	private ImageView back, next, pre;
 	private ArrayList<Fragment> fragments;

@@ -29,6 +29,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
+import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -40,7 +41,9 @@ import com.ruisi.bi.app.common.APIContext;
 import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
+import com.ruisi.bi.app.parser.BaseParser;
 import com.ruisi.bi.app.parser.TuParser;
+import com.ruisi.bi.app.parser.TuZhuxingParser;
 import com.ruisi.bi.app.view.MyValueFormatter;
 
 public class TuActivity extends Activity implements ServerCallbackInterface,
@@ -63,7 +66,7 @@ public class TuActivity extends Activity implements ServerCallbackInterface,
 		setContentView(R.layout.tu_activity_layout);
 		mChart = (LineChart) findViewById(R.id.chart1);
 		initChart();
-		mChart1 = (BarChart) findViewById(R.id.chart1);
+		mChart1 = (BarChart) findViewById(R.id.chart2);
 		initChart1();
 
 		ArrayList data_list = new ArrayList<String>();
@@ -82,7 +85,7 @@ public class TuActivity extends Activity implements ServerCallbackInterface,
 				.setAdapter(arr_adapter);
 		((Spinner) findViewById(R.id.TuActivity_spinner))
 				.setOnItemSelectedListener(this);
-		sendRequest();
+		sendRequest(new TuParser());
 	}
 	private void initChart1(){
 		mChart1.setOnChartValueSelectedListener(this);
@@ -200,12 +203,12 @@ public class TuActivity extends Activity implements ServerCallbackInterface,
 		mChart.getAxisRight().setEnabled(false);
 	}
 
-	private void sendRequest() {
+	private void sendRequest(BaseParser parser) {
 		ServerEngine serverEngine = new ServerEngine(this);
 		RequestVo rv = new RequestVo();
 		rv.context = this;
 		rv.functionPath = APIContext.tu;
-		rv.parser = new TuParser();
+		rv.parser =parser  ;
 		rv.Type = APIContext.GET;
 		tuUUID = UUID.randomUUID().toString();
 		rv.uuId = tuUUID;
@@ -230,8 +233,16 @@ public class TuActivity extends Activity implements ServerCallbackInterface,
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (uuid.equals(tuUUID)) {
-			mChart.setData((LineData) object);
-			updataChart();
+			if(postion==0){
+				mChart.setVisibility(View.VISIBLE);
+				mChart1.setVisibility(View.GONE);
+				mChart.setData((LineData) object);
+				updataChart();
+			}else if(postion==1){
+				mChart.setVisibility(View.GONE);
+				mChart1.setVisibility(View.VISIBLE);
+				mChart1.setData((BarData) object);
+			}
 		}
 	}
 
@@ -263,7 +274,7 @@ public class TuActivity extends Activity implements ServerCallbackInterface,
 				obj = new JSONObject(strJsons);
 				obj.getJSONObject("chartJson").put("type", "line");
 				strJsons = obj.toString();
-				sendRequest();
+				sendRequest(new TuParser());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -276,7 +287,7 @@ public class TuActivity extends Activity implements ServerCallbackInterface,
 				obj1 = new JSONObject(strJsons);
 				obj1.getJSONObject("chartJson").put("type", "column");
 				strJsons = obj1.toString();
-				sendRequest();
+				sendRequest(new TuZhuxingParser());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
