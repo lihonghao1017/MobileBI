@@ -138,7 +138,7 @@ public class TuZhuxingFragment extends Fragment implements
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if(uuid.equals(zhuxingUUID)){
 			mChart1.setData((BarData) object);
-			mChart1.invalidate();
+			mChart1.animateY(3000);
 		}
 	}
 

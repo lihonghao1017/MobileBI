@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.ruisi.bi.app.fragment.TuQuxianFragment;
-import com.ruisi.bi.app.fragment.TuZhuxingFragment;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,12 +18,17 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 
+import com.ruisi.bi.app.fragment.TuBingxingFragment;
+import com.ruisi.bi.app.fragment.TuQuxianFragment;
+import com.ruisi.bi.app.fragment.TuZhuxingFragment;
+
 public class TuActivity extends FragmentActivity implements
 		OnItemSelectedListener {
 	private static String strJsons;
 	private FrameLayout container;
 	private TuQuxianFragment quxianFragment;
 	private TuZhuxingFragment zhuxingFragment;
+	private TuBingxingFragment bingxingFragment;
 	private FragmentManager fm;
 	private FragmentTransaction ft;
 
@@ -64,6 +66,7 @@ public class TuActivity extends FragmentActivity implements
 		fm = getSupportFragmentManager();
 		quxianFragment = new TuQuxianFragment(strJsons);
 		zhuxingFragment = new TuZhuxingFragment(getRequestJson("column"));
+		bingxingFragment=new TuBingxingFragment(getRequestJson("pie"));
 		ft = fm.beginTransaction();
 		ft.replace(R.id.TuActivity_container, quxianFragment).commit();
 	}
@@ -105,7 +108,8 @@ public class TuActivity extends FragmentActivity implements
 			ft.replace(R.id.TuActivity_container, zhuxingFragment).commit();
 			break;
 		case 2:
-
+			ft = fm.beginTransaction();
+			ft.replace(R.id.TuActivity_container, bingxingFragment).commit();
 			break;
 		case 3:
 

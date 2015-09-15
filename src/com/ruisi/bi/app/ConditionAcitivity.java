@@ -210,7 +210,7 @@ public class ConditionAcitivity extends Activity implements
 					e.printStackTrace();
 				}
 			}else {
-				Toast.makeText(this, "��ѡ��!!!", 1000).show();
+				Toast.makeText(this, "请正确选择！！！", 1000).show();
 			}
 			break;
 		case R.id.totu:
@@ -221,7 +221,7 @@ public class ConditionAcitivity extends Activity implements
 					e.printStackTrace();
 				}
 			}else {
-				Toast.makeText(this, "��ѡ��!!!", 1000).show();
+				Toast.makeText(this, "请正确选择！！！", 1000).show();
 			}
 			break;
 		default:
@@ -337,7 +337,7 @@ public class ConditionAcitivity extends Activity implements
 
 		obj.put("tableJson", objTable);
 
-//		objALL.put("table", obj);
+		objALL.put("table", obj);
 
 		JSONArray WeiduArray = new JSONArray();
 		for (int i = 0; i < weidusShow.size(); i++) {
@@ -361,7 +361,6 @@ public class ConditionAcitivity extends Activity implements
 		return objALL.toString();
 	}
 	public String getChatJson() throws JSONException {
-		JSONObject objALL = new JSONObject();
 		JSONObject obj = new JSONObject();
 		JSONArray zhibiaoArray = new JSONArray();
 		for (int i = 0; i < zhibiaosShow.size(); i++) {
@@ -382,7 +381,7 @@ public class ConditionAcitivity extends Activity implements
 		obj.put("kpiJson", zhibiaoArray);
 
 		JSONObject objTable = new JSONObject();
-		JSONArray arrayHang = new JSONArray();
+//		JSONArray arrayHang = new JSONArray();
 //		for (int i = 0; i < weidusHangShow.size(); i++) {
 			JSONObject weidusHangObj = new JSONObject();
 			WeiduBean weiduhangObj = weidusHangShow.get(0);
@@ -404,7 +403,7 @@ public class ConditionAcitivity extends Activity implements
 //		}
 		objTable.put("scol", weidusHangObj);
 		objTable.put("type", "line");
-		JSONArray arrayLie = new JSONArray();
+//		JSONArray arrayLie = new JSONArray();
 //		for (int i = 0; i < weidusLieShow.size(); i++) {
 			JSONObject weidusLieObj = new JSONObject();
 			WeiduBean weiduLieObj = weidusLieShow.get(0);
