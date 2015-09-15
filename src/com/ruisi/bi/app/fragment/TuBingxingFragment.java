@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.PercentFormatter;
 import com.ruisi.bi.app.R;
 import com.ruisi.bi.app.bean.RequestVo;
 import com.ruisi.bi.app.common.APIContext;
@@ -70,9 +71,9 @@ public class TuBingxingFragment extends Fragment implements
 		mChart.setDescription("");
 
 		mChart.setDragDecelerationFrictionCoef(0.95f);
-
-		mChart.setCenterTextTypeface(Typeface.createFromAsset(getActivity()
-				.getAssets(), "OpenSans-Light.ttf"));
+		tf = Typeface.createFromAsset(getActivity().getAssets(),
+				"OpenSans-Light.ttf");
+		mChart.setCenterTextTypeface(tf);
 
 		mChart.setDrawHoleEnabled(true);
 		mChart.setHoleColorTransparent(true);
@@ -111,17 +112,14 @@ public class TuBingxingFragment extends Fragment implements
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (uuid.equals(bingxingUUID)) {
+			PieData data = (PieData) object;
+			data.setValueFormatter(new PercentFormatter());
+			data.setValueTextSize(11f);
+			data.setValueTextColor(Color.WHITE);
+			data.setValueTypeface(tf);
 			mChart.setData((PieData) object);
 			mChart.highlightValues(null);
-			mChart.invalidate();
-			mChart.animateY(1500, Easing.EasingOption.EaseInOutQuad);
-			// mChart.spin(2000, 0, 360);
-
-			Legend l = mChart.getLegend();
-			l.setPosition(LegendPosition.RIGHT_OF_CHART);
-			l.setXEntrySpace(7f);
-			l.setYEntrySpace(0f);
-			l.setYOffset(0f);
+	        mChart.invalidate();
 		}
 	}
 
