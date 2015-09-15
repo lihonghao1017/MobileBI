@@ -23,28 +23,30 @@ import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.ThemeParser;
 
-public class ThemeFragment extends Fragment implements ServerCallbackInterface{
+public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 	private ExpandableListView ThemeFragment_listView;
 	private ArrayList<ThemeBean> themes;
 	private ThemeAdapter themeAdapter;
 	private String themeUUID;
-	
-@Override
-public void onAttach(Activity activity) {
-	// TODO Auto-generated method stub
-	super.onAttach(activity);
-	((ProgressBar)activity.findViewById(R.id.progress_bar)).setProgress(0);
-}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		((ProgressBar) activity.findViewById(R.id.progress_bar)).setProgress(0);
+	}
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.thiem_fragment_layout, null);
-		ThemeFragment_listView=(ExpandableListView) v.findViewById(R.id.ThemeFragment_listView);
-		themes=new ArrayList<ThemeBean>();
-		themeAdapter=new ThemeAdapter(getActivity(), themes);
+		ThemeFragment_listView = (ExpandableListView) v
+				.findViewById(R.id.ThemeFragment_listView);
+		themes = new ArrayList<ThemeBean>();
+		themeAdapter = new ThemeAdapter(getActivity(), themes);
 		ThemeFragment_listView.setAdapter(themeAdapter);
 		sendRequest();
 		return v;
 	}
+
 	private void sendRequest() {
 		ServerEngine serverEngine = new ServerEngine(this);
 		RequestVo rv = new RequestVo();
@@ -65,18 +67,18 @@ public void onAttach(Activity activity) {
 
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
-		if(themeUUID.equals(uuid)){
+		if (themeUUID.equals(uuid)) {
 			themes.clear();
 			themes.addAll((Collection<? extends ThemeBean>) object);
 			themeAdapter.notifyDataSetChanged();
-		    for(int i = 0; i < themes.size(); i++){  
-		    	ThemeFragment_listView.expandGroup(i);  
-		     }  
+			for (int i = 0; i < themes.size(); i++) {
+				ThemeFragment_listView.expandGroup(i);
+			}
 		}
 	}
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		
+
 	}
 }
