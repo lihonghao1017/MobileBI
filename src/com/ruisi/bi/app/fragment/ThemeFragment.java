@@ -32,7 +32,7 @@ public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((ProgressBar) activity.findViewById(R.id.progress_bar)).setProgress(0);
+//		((ProgressBar) activity.findViewById(R.id.progress_bar)).setProgress(0);
 	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

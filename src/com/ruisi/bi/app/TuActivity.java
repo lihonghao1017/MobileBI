@@ -19,7 +19,9 @@ import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.ruisi.bi.app.fragment.TuBingxingFragment;
+import com.ruisi.bi.app.fragment.TuLeidaFragment;
 import com.ruisi.bi.app.fragment.TuQuxianFragment;
+import com.ruisi.bi.app.fragment.TuTiaoxingFragment;
 import com.ruisi.bi.app.fragment.TuZhuxingFragment;
 
 public class TuActivity extends FragmentActivity implements
@@ -29,6 +31,8 @@ public class TuActivity extends FragmentActivity implements
 	private TuQuxianFragment quxianFragment;
 	private TuZhuxingFragment zhuxingFragment;
 	private TuBingxingFragment bingxingFragment;
+	private TuTiaoxingFragment tiaoxingFragment;
+	private TuLeidaFragment leidaFragment;
 	private FragmentManager fm;
 	private FragmentTransaction ft;
 
@@ -66,7 +70,9 @@ public class TuActivity extends FragmentActivity implements
 		fm = getSupportFragmentManager();
 		quxianFragment = new TuQuxianFragment(strJsons);
 		zhuxingFragment = new TuZhuxingFragment(getRequestJson("column"));
-		bingxingFragment=new TuBingxingFragment(getRequestJson("pie"));
+		bingxingFragment = new TuBingxingFragment(getRequestJson("pie"));
+		tiaoxingFragment = new TuTiaoxingFragment(getRequestJson("bar"));
+		leidaFragment=new TuLeidaFragment(getRequestJson("radar"));
 		ft = fm.beginTransaction();
 		ft.replace(R.id.TuActivity_container, quxianFragment).commit();
 	}
@@ -112,9 +118,17 @@ public class TuActivity extends FragmentActivity implements
 			ft.replace(R.id.TuActivity_container, bingxingFragment).commit();
 			break;
 		case 3:
-
+			ft = fm.beginTransaction();
+			ft.replace(R.id.TuActivity_container, tiaoxingFragment).commit();
 			break;
-
+		case 4:
+//			ft = fm.beginTransaction();
+//			ft.replace(R.id.TuActivity_container, bingxingFragment).commit();
+			break;
+		case 5:
+			ft = fm.beginTransaction();
+			ft.replace(R.id.TuActivity_container, leidaFragment).commit();
+			break;
 		default:
 			break;
 		}
