@@ -3,6 +3,9 @@ package com.ruisi.bi.app.fragment;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,7 +40,18 @@ public class TuBingxingFragment extends Fragment implements
 	private Typeface tf;
 
 	public TuBingxingFragment(String requestJson) {
-		this.requestJson = requestJson;
+		try {
+			JSONObject obj=new JSONObject(requestJson);
+			JSONObject newObj=new JSONObject();
+			newObj.put("type", "pie");
+			newObj.put("xcol", obj.getJSONObject("chartJson").getJSONObject("xcol"));
+			obj.put("chartJson", newObj);
+			this.requestJson = obj.toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
