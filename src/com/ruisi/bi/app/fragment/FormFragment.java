@@ -82,7 +82,7 @@ public class FormFragment extends Fragment implements ServerCallbackInterface {
 			TableRows.clear();
 			TableRows.addAll((Collection<? extends TableRow>) object);
 			adapter.notifyDataSetChanged();
-			Toast.makeText(getActivity(), "³É¹¦", 2000).show();
+			Toast.makeText(getActivity(), "ï¿½É¹ï¿½", 2000).show();
 			// themes.clear();
 			// themes.addAll((Collection<? extends ThemeBean>) object);
 			// themeAdapter.notifyDataSetChanged();
@@ -95,7 +95,7 @@ public class FormFragment extends Fragment implements ServerCallbackInterface {
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
 		if (formUUID.equals(uuid)) {
-			Toast.makeText(getActivity(), "Ê§°Ü", 2000).show();
+			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
 		}
 	}
 

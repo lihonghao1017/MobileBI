@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -70,7 +71,7 @@ public class TuBingxingFragment extends Fragment implements
 		rv.context = this.getActivity();
 		rv.functionPath = APIContext.tu;
 		rv.parser = new TuBingxingParser();
-		rv.Type = APIContext.GET;
+		rv.Type = APIContext.POST;
 		bingxingUUID = UUID.randomUUID().toString();
 		rv.uuId = bingxingUUID;
 		rv.isSaveToLocation = false;
@@ -139,6 +140,7 @@ public class TuBingxingFragment extends Fragment implements
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-
+		if (uuid.equals(bingxingUUID))
+		Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
 	}
 }

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ruisi.bi.app.AnalysisActivity;
 import com.ruisi.bi.app.R;
@@ -152,7 +153,7 @@ public class ConditionFragment extends Fragment implements
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-
+		Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
 	}
 
 	@Override
