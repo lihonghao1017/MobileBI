@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ruisi.bi.app.bean.RequestVo;
+import com.ruisi.bi.app.bean.UserBean;
 import com.ruisi.bi.app.common.APIContext;
+import com.ruisi.bi.app.common.UserMsg;
 import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
@@ -82,6 +84,10 @@ public class LoginActivity extends Activity implements OnClickListener,
 	public <T> void succeedReceiveData(T object, String uuid) {
       Toast.makeText(this, "chengong!!!", 1000).show();
       if(LoginUUID.equals(uuid)){
+    	  UserBean userBean=new UserBean();
+    	  userBean.name=et_username.getText().toString();
+    	  userBean.pwd=et_pwd.getText().toString();
+    	  UserMsg.saveRigester(userBean);
     	  startActivity(new Intent(this,MenuActivity.class));
       }
 	}

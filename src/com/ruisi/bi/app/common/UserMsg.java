@@ -16,8 +16,7 @@ public class UserMsg {
 	public static void saveRigester(UserBean info){
 		Editor editor = sp.edit();
 		editor.putString("name", info.name);
-		editor.putString("Token", info.token);
-		editor.putString("PWD", info.pwd);
+		editor.putString("pwd", info.pwd);
 		editor.commit();
 	}
 	public static String getUserId(){
@@ -25,5 +24,11 @@ public class UserMsg {
 	}
 	public static String getToken(){
 		return sp.getString("Token", null);
+	}
+	public static String getPwd(){
+		return sp.getString("pwd", null);
+	}
+	public static String getName(){
+		return sp.getString("name", null);
 	}
 }

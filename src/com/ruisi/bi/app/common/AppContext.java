@@ -38,7 +38,7 @@ public class AppContext extends Application {
 		// 关闭友盟默认的统计方式
 		dm = new DisplayMetrics();
 		super.onCreate();
-
+		UserMsg.initUserMsg(this);
 		initImageLoader(getApplicationContext());
 	}
 
