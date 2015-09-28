@@ -8,8 +8,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,12 +23,15 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.MenuParser;
+import com.ruisi.bi.app.view.MenuPopwindow;
 
-public class MenuActivity extends Activity implements ServerCallbackInterface,OnItemClickListener {
+public class MenuActivity extends Activity implements ServerCallbackInterface,
+		OnItemClickListener, OnClickListener {
 	private ListView lv;
 	private MenuAdapter mainAdapter;
 	private ArrayList<MenuBean> datas;
 	private String MenuUUID;
+	private ImageView setting_iv;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,8 @@ public class MenuActivity extends Activity implements ServerCallbackInterface,On
 		setContentView(R.layout.activity_main);
 		lv = (ListView) findViewById(R.id.MainActivity_listview);
 		lv.setOnItemClickListener(this);
+		setting_iv=(ImageView) findViewById(R.id.setting);
+		setting_iv.setOnClickListener(this);
 		datas = new ArrayList<>();
 		mainAdapter = new MenuAdapter(this, datas);
 		lv.setAdapter(mainAdapter);
@@ -69,14 +76,21 @@ public class MenuActivity extends Activity implements ServerCallbackInterface,On
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		if (MenuUUID.equals(uuid)) 
-		Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
+		if (MenuUUID.equals(uuid))
+			Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		if (arg2==0) {
+		if (arg2 == 0) {
 			startActivity(new Intent(this, AnalysisActivity.class));
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v==setting_iv) {
+			MenuPopwindow.getMenuPopwindow(this, lv);
 		}
 	}
 

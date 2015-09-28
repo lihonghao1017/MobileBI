@@ -24,13 +24,13 @@ public class MyPopwindow {
 		lv.setAdapter(adapter);
 		TextView title=(TextView) mView.findViewById(R.id.MyPopwindow_title);
 		if(flag==0){
-			title.setText("Ñ¡ÔñÎ¬¶È");
+			title.setText("ç»´åº¦");
 		}else if(flag==1){
-			title.setText("Ñ¡ÔñÐÐ±êÇ©");
+			title.setText("è¡Œæ ‡ç­¾");
 		}else if(flag==2){
-			title.setText("Ñ¡ÔñÁÐ±êÇ©");
+			title.setText("åˆ—æ ‡ç­¾");
 		}else if(flag==3){
-			title.setText("Ñ¡ÔñÖ¸±ê");
+			title.setText("æŒ‡æ ‡");
 		}
 		
 		final PopupWindow menuWindow = new PopupWindow(mView,
