@@ -146,7 +146,7 @@ public class ConditionAcitivity extends Activity implements
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-
+		Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 	}
 
 	@Override
@@ -384,6 +384,7 @@ public class ConditionAcitivity extends Activity implements
 //		JSONArray arrayHang = new JSONArray();
 //		for (int i = 0; i < weidusHangShow.size(); i++) {
 			JSONObject weidusHangObj = new JSONObject();
+			if(weidusHangShow.size()>0){
 			WeiduBean weiduhangObj = weidusHangShow.get(0);
 			weidusHangObj.put("tid", weiduhangObj.tid);
 			weidusHangObj.put("valType", weiduhangObj.valType);
@@ -400,27 +401,30 @@ public class ConditionAcitivity extends Activity implements
 			weidusHangObj.put("colname", weiduhangObj.col_name);
 			weidusHangObj.put("type", weiduhangObj.dim_type);
 //			arrayHang.put(weidusHangObj);
-//		}
+		}
 		objTable.put("scol", weidusHangObj);
 		objTable.put("type", "line");
 //		JSONArray arrayLie = new JSONArray();
 //		for (int i = 0; i < weidusLieShow.size(); i++) {
 			JSONObject weidusLieObj = new JSONObject();
-			WeiduBean weiduLieObj = weidusLieShow.get(0);
-			weidusLieObj.put("tid", weiduLieObj.tid);
-			weidusLieObj.put("valType", weiduLieObj.valType);
-			weidusLieObj.put("iscas", weiduLieObj.iscas);
-			weidusLieObj.put("grouptype", weiduLieObj.grouptype);
-			weidusLieObj.put("dim_name", weiduLieObj.dim_name);
-			weidusLieObj.put("dimord", weiduLieObj.dimord);
-			weidusLieObj.put("tableName", weiduLieObj.tableName);
-			weidusLieObj.put("tableColName", weiduLieObj.tableColName);
-			weidusLieObj.put("tableColKey", weiduLieObj.tableColKey);
-			weidusLieObj.put("tname", weiduLieObj.tname);
-			weidusLieObj.put("id", weiduLieObj.col_id);
-			weidusLieObj.put("dimdesc", weiduLieObj.text);
-			weidusLieObj.put("colname", weiduLieObj.col_name);
-			weidusLieObj.put("type", weiduLieObj.dim_type);
+			if(weidusLieShow.size()>0){
+				
+				WeiduBean weiduLieObj = weidusLieShow.get(0);
+				weidusLieObj.put("tid", weiduLieObj.tid);
+				weidusLieObj.put("valType", weiduLieObj.valType);
+				weidusLieObj.put("iscas", weiduLieObj.iscas);
+				weidusLieObj.put("grouptype", weiduLieObj.grouptype);
+				weidusLieObj.put("dim_name", weiduLieObj.dim_name);
+				weidusLieObj.put("dimord", weiduLieObj.dimord);
+				weidusLieObj.put("tableName", weiduLieObj.tableName);
+				weidusLieObj.put("tableColName", weiduLieObj.tableColName);
+				weidusLieObj.put("tableColKey", weiduLieObj.tableColKey);
+				weidusLieObj.put("tname", weiduLieObj.tname);
+				weidusLieObj.put("id", weiduLieObj.col_id);
+				weidusLieObj.put("dimdesc", weiduLieObj.text);
+				weidusLieObj.put("colname", weiduLieObj.col_name);
+				weidusLieObj.put("type", weiduLieObj.dim_type);
+			}
 //			arrayLie.put(weidusLieObj);
 //		}
 //		JSONObject weidusLieObjWei = new JSONObject();

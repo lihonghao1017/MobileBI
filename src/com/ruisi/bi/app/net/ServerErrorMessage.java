@@ -3,11 +3,20 @@ package com.ruisi.bi.app.net;
 public class ServerErrorMessage {
 
 	private String errormessage = "";
+	private String errorDes = "";
 	private String errorurl = "";
 	private int HttpStatusCode = 0;
 
 	public int getHttpStatusCode() {
 		return HttpStatusCode;
+	}
+
+	public String getErrorDes() {
+		return errorDes;
+	}
+
+	public void setErrorDes(String errorDes) {
+		this.errorDes = errorDes;
 	}
 
 	public void setHttpStatusCode(int httpStatusCode) {

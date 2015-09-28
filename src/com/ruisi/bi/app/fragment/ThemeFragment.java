@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ruisi.bi.app.R;
 import com.ruisi.bi.app.adapter.ThemeAdapter;
@@ -79,6 +80,6 @@ public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-
+		Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
 	}
 }

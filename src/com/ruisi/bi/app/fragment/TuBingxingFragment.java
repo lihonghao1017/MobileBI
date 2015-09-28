@@ -3,6 +3,9 @@ package com.ruisi.bi.app.fragment;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -37,7 +41,18 @@ public class TuBingxingFragment extends Fragment implements
 	private Typeface tf;
 
 	public TuBingxingFragment(String requestJson) {
-		this.requestJson = requestJson;
+		try {
+			JSONObject obj=new JSONObject(requestJson);
+			JSONObject newObj=new JSONObject();
+			newObj.put("type", "pie");
+			newObj.put("xcol", obj.getJSONObject("chartJson").getJSONObject("xcol"));
+			obj.put("chartJson", newObj);
+			this.requestJson = obj.toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
@@ -56,7 +71,7 @@ public class TuBingxingFragment extends Fragment implements
 		rv.context = this.getActivity();
 		rv.functionPath = APIContext.tu;
 		rv.parser = new TuBingxingParser();
-		rv.Type = APIContext.GET;
+		rv.Type = APIContext.POST;
 		bingxingUUID = UUID.randomUUID().toString();
 		rv.uuId = bingxingUUID;
 		rv.isSaveToLocation = false;
@@ -125,6 +140,7 @@ public class TuBingxingFragment extends Fragment implements
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-
+		if (uuid.equals(bingxingUUID))
+		Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
 	}
 }

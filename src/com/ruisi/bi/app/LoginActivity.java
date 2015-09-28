@@ -82,7 +82,6 @@ public class LoginActivity extends Activity implements OnClickListener,
 
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
-      Toast.makeText(this, "chengong!!!", 1000).show();
       if(LoginUUID.equals(uuid)){
     	  UserBean userBean=new UserBean();
     	  userBean.name=et_username.getText().toString();
@@ -94,6 +93,6 @@ public class LoginActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		Toast.makeText(this, "yyyyyyyyyyyy!!!", 1000).show();
+		Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 	}
 }

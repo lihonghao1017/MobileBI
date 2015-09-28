@@ -59,31 +59,26 @@ public class ServerUrlConnection implements Runnable {
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Bundle bundle = msg.getData();
-			if (serverEngine.CloseConnection(bundle.getString("identifiy"))) {
+			String uuid=bundle.getString("identifiy");
+			if (serverEngine.CloseConnection(uuid)) {
 //				System.out.println("关闭链接---�? + bundle.getString("identifiy"));
 			}
 			switch (msg.what) {
 			case SUCCEEND:
 				if (!Thread.interrupted()) {
-					serverCallbackInterface.succeedReceiveData(msg.obj,
-							bundle.getString("identifiy"));
+					serverCallbackInterface.succeedReceiveData(msg.obj,uuid);
 				}
 				break;
 			case FAILED:
-				ServerErrorMessage errorMessage = new ServerErrorMessage();
-				errorMessage.setErrormessage(msg.obj.toString());
+				ServerErrorMessage errorMessage = (ServerErrorMessage) msg.obj;
 				if (!Thread.interrupted())
-					serverCallbackInterface.failedWithErrorInfo(errorMessage,
-							bundle.getString("identifiy"));
+					serverCallbackInterface.failedWithErrorInfo(errorMessage,uuid);
 				break;
 			case EXCEPTION:
-				ServerErrorMessage exceptionMessage = new ServerErrorMessage();
-				exceptionMessage
-						.setErrormessage(bundle.getString("errMessage"));
-				exceptionMessage.setErrorurl(bundle.getString("url"));
+				ServerErrorMessage errorMessage2 = (ServerErrorMessage) msg.obj;
 				if (!Thread.interrupted()) {
 					serverCallbackInterface.failedWithErrorInfo(
-							exceptionMessage, bundle.getString("identifiy"));
+							errorMessage2, uuid);
 				}
 				break;
 			default:
@@ -209,23 +204,22 @@ public class ServerUrlConnection implements Runnable {
 							sendSuccendMessage(obj, vo.uuId);
 //						}
 					} else {
-						sendFailedMessage("shibai", vo.uuId);
+						sendExceptionMessage(null,"数据异常", vo.uuId);
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-					sendExceptionMessage(e, finalUrl, vo.uuId);
+					sendExceptionMessage(e, "数据异常", vo.uuId);
 				}
 			} else {
-				sendFailedMessage(r + "....." + finalUrl
-						+ "服务器异�?服务器状态：StatusLine==" + StatusLine, vo.uuId);
+				sendExceptionMessage(null,r + "....."
+						+ "服务器异", vo.uuId);
 			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-			sendExceptionMessage(e, finalUrl, vo.uuId);
+			sendExceptionMessage(e, "网络异常", vo.uuId);
 		} catch (IOException e) {
 			e.printStackTrace();
-			sendExceptionMessage(e, finalUrl, vo.uuId);
+			sendExceptionMessage(e, "网络异常", vo.uuId);
 		}
 	}
 
@@ -278,34 +272,37 @@ public class ServerUrlConnection implements Runnable {
 							sendSuccendMessage(obj, vo.uuId);
 //						}
 					} else {
-						sendFailedMessage("数据异常", vo.uuId);
+						sendExceptionMessage(null,"数据异常", vo.uuId);
 					}
 					
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					sendExceptionMessage(e, finalUrl, vo.uuId);
+					sendExceptionMessage(e, "数据异常", vo.uuId);
 				}
 			}else {
-				sendFailedMessage("服务器异常：", vo.uuId);
+				sendExceptionMessage(null,"服务器异常：", vo.uuId);
 			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-			sendExceptionMessage(e, finalUrl, vo.uuId);
+			sendExceptionMessage(e, "网络异常", vo.uuId);
 		} catch (IOException e) {
 			e.printStackTrace();
-			sendExceptionMessage(e, finalUrl, vo.uuId);
+			sendExceptionMessage(e, "网络异常", vo.uuId);
 		}
 	}
 
-	public void sendExceptionMessage(Exception e, String url, String uuId) {
+	public void sendExceptionMessage(Exception e, String des, String uuId) {
+		
+		ServerErrorMessage exceptionMessage = new ServerErrorMessage();
+		exceptionMessage.setErrormessage(e!=null?e.getMessage():"");
+		exceptionMessage.setErrorDes(des);
 		Message message = Message.obtain();
 		message.what = EXCEPTION;
 		Bundle bundle = new Bundle();
 		bundle.putString("identifiy", uuId);
-		bundle.putString("errMessage", e.getMessage());
-		bundle.putString("url", url);
 		message.setData(bundle);
+		message.obj=exceptionMessage;
 		handler.sendMessage(message);
 	}
 

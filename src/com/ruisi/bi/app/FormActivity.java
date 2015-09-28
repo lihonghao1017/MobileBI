@@ -85,7 +85,7 @@ public class FormActivity extends Activity implements ServerCallbackInterface {
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
 		if (formUUID.equals(uuid)) {
-			Toast.makeText(this, "失败！！！", 2000).show();
+			Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 		}
 	}
 }

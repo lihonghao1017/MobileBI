@@ -48,7 +48,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="onClick"
-            android:text="图标"
+            android:text="图表"
             android:textSize="16sp"/>
     </LinearLayout>
 
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="11dp"
-                android:text="航标签:" />
+                android:text="行标签:" />
 
             <Button
                 android:id="@+id/ConditionFragment_Weidu_hang_actv"

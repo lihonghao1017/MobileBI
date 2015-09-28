@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -83,7 +84,7 @@ public class TuQuxianFragment extends Fragment implements
 		rv.context = this.getActivity();
 		rv.functionPath = APIContext.tu;
 		rv.parser = new TuParser();
-		rv.Type = APIContext.GET;
+		rv.Type = APIContext.POST;
 		quxianUUID = UUID.randomUUID().toString();
 		rv.uuId = quxianUUID;
 		rv.isSaveToLocation = false;
@@ -103,12 +104,13 @@ public class TuQuxianFragment extends Fragment implements
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-
+		if (uuid.equals(quxianUUID))
+			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
 	}
 
 	private void updataChart() {
 		mChart.animateX(2500);
-
+		mChart.zoom(4.0f, 4.0f, 0.0f, 0.0f);
 		Typeface tf = Typeface.createFromAsset(this.getActivity().getAssets(),
 				"OpenSans-Regular.ttf");
 

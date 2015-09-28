@@ -69,7 +69,8 @@ public class MenuActivity extends Activity implements ServerCallbackInterface,On
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		Toast.makeText(this, errorMessage.getErrormessage(), 1000).show();
+		if (MenuUUID.equals(uuid)) 
+		Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 	}
 
 	@Override
