@@ -31,6 +31,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.TuParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 
 public class TuQuxianFragment extends Fragment implements
 		ServerCallbackInterface, OnChartValueSelectedListener {
@@ -48,6 +49,7 @@ public class TuQuxianFragment extends Fragment implements
 		View v = inflater.inflate(R.layout.tu_quxian_fragment, null);
 		mChart = (LineChart) v.findViewById(R.id.chart1);
 		initLineChart();
+		LoadingDialog.createLoadingDialog(getActivity());
 		sendRequest();
 		return v;
 	}
@@ -97,6 +99,7 @@ public class TuQuxianFragment extends Fragment implements
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (uuid.equals(quxianUUID)) {
+			LoadingDialog.dimmissLoading();
 			mChart.setData((LineData) object);
 			updataChart();
 		}
@@ -104,8 +107,11 @@ public class TuQuxianFragment extends Fragment implements
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		if (uuid.equals(quxianUUID))
-			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
+		if (uuid.equals(quxianUUID)) {
+			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000)
+					.show();
+			LoadingDialog.dimmissLoading();
+		}
 	}
 
 	private void updataChart() {

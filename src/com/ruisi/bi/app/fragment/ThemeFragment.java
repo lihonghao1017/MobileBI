@@ -23,6 +23,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.ThemeParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 
 public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 	private ExpandableListView ThemeFragment_listView;
@@ -33,7 +34,8 @@ public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-//		((ProgressBar) activity.findViewById(R.id.progress_bar)).setProgress(0);
+		// ((ProgressBar)
+		// activity.findViewById(R.id.progress_bar)).setProgress(0);
 	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +46,7 @@ public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 		themes = new ArrayList<ThemeBean>();
 		themeAdapter = new ThemeAdapter(getActivity(), themes);
 		ThemeFragment_listView.setAdapter(themeAdapter);
+		LoadingDialog.createLoadingDialog(this.getActivity());
 		sendRequest();
 		return v;
 	}
@@ -69,6 +72,7 @@ public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (themeUUID.equals(uuid)) {
+			LoadingDialog.dimmissLoading();
 			themes.clear();
 			themes.addAll((Collection<? extends ThemeBean>) object);
 			themeAdapter.notifyDataSetChanged();
@@ -80,6 +84,10 @@ public class ThemeFragment extends Fragment implements ServerCallbackInterface {
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
+		if (themeUUID.equals(uuid)) {
+			LoadingDialog.dimmissLoading();
+			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000)
+					.show();
+		}
 	}
 }

@@ -31,6 +31,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.TuBingxingParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 
 public class TuBingxingFragment extends Fragment implements
 		ServerCallbackInterface, OnChartValueSelectedListener {
@@ -42,17 +43,18 @@ public class TuBingxingFragment extends Fragment implements
 
 	public TuBingxingFragment(String requestJson) {
 		try {
-			JSONObject obj=new JSONObject(requestJson);
-			JSONObject newObj=new JSONObject();
+			JSONObject obj = new JSONObject(requestJson);
+			JSONObject newObj = new JSONObject();
 			newObj.put("type", "pie");
-			newObj.put("xcol", obj.getJSONObject("chartJson").getJSONObject("xcol"));
+			newObj.put("xcol",
+					obj.getJSONObject("chartJson").getJSONObject("xcol"));
 			obj.put("chartJson", newObj);
 			this.requestJson = obj.toString();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
@@ -61,6 +63,7 @@ public class TuBingxingFragment extends Fragment implements
 		View v = inflater.inflate(R.layout.tu_bingxing_fragment, null);
 		mChart = (PieChart) v.findViewById(R.id.TuBingxingFragment_chart);
 		initLineChart();
+		LoadingDialog.createLoadingDialog(getActivity());
 		sendRequest();
 		return v;
 	}
@@ -127,6 +130,7 @@ public class TuBingxingFragment extends Fragment implements
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (uuid.equals(bingxingUUID)) {
+			LoadingDialog.dimmissLoading();
 			PieData data = (PieData) object;
 			data.setValueFormatter(new PercentFormatter());
 			data.setValueTextSize(11f);
@@ -134,13 +138,16 @@ public class TuBingxingFragment extends Fragment implements
 			data.setValueTypeface(tf);
 			mChart.setData((PieData) object);
 			mChart.highlightValues(null);
-	        mChart.invalidate();
+			mChart.invalidate();
 		}
 	}
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		if (uuid.equals(bingxingUUID))
-		Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
+		if (uuid.equals(bingxingUUID)) {
+			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000)
+					.show();
+			LoadingDialog.dimmissLoading();
+		}
 	}
 }

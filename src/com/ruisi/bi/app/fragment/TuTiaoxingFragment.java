@@ -32,6 +32,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.TuZhuxingParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 import com.ruisi.bi.app.view.MyValueFormatter;
 
 public class TuTiaoxingFragment extends Fragment implements
@@ -51,6 +52,7 @@ public class TuTiaoxingFragment extends Fragment implements
 		View v = inflater.inflate(R.layout.tu_tiaoxing_fragment, null);
 		mChart = (HorizontalBarChart) v.findViewById(R.id.chart1);
 		initLineChart();
+		LoadingDialog.createLoadingDialog(getActivity());
 		sendRequest();
 		return v;
 	}
@@ -135,6 +137,7 @@ public class TuTiaoxingFragment extends Fragment implements
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (uuid.equals(zhuxingUUID)) {
+			LoadingDialog.dimmissLoading();
 			BarData data = (BarData) object;
 			data.setValueTextSize(10f);
 			data.setValueTypeface(tf);
@@ -149,8 +152,11 @@ public class TuTiaoxingFragment extends Fragment implements
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		if (uuid.equals(zhuxingUUID))
-			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
+		if (uuid.equals(zhuxingUUID)) {
+			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000)
+					.show();
+			LoadingDialog.dimmissLoading();
+		}
 	}
 
 }

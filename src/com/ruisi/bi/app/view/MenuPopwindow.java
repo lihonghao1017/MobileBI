@@ -3,6 +3,7 @@ package com.ruisi.bi.app.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.util.DisplayMetrics;
@@ -11,20 +12,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.ruisi.bi.app.LoginActivity;
 import com.ruisi.bi.app.R;
+import com.ruisi.bi.app.WelecomActivity;
+import com.ruisi.bi.app.common.UserMsg;
 
 public class MenuPopwindow {
-	public static PopupWindow getMenuPopwindow(Activity context, View vs) {
+	public static PopupWindow getMenuPopwindow(final Activity context, View vs) {
 		View mView = LayoutInflater.from(context).inflate(
 				R.layout.setting_popwindow, null);
 		ListView lv = (ListView) mView.findViewById(R.id.popwindow_lv);
 		lv.setAdapter(new MenuAdapter(context));
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (position==0) {
+					UserMsg.clearAccount();
+					context.startActivity(new Intent(context, LoginActivity.class));
+					context.finish();
+				}else if(position==1){
+					
+				}
+			}
+		});
 		 DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
 		final PopupWindow menuWindow = new PopupWindow(mView,

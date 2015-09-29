@@ -22,6 +22,7 @@ import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.WeiduParser;
 import com.ruisi.bi.app.parser.ZhibiaoParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 import com.ruisi.bi.app.view.MyPopwindow;
 
 import android.app.Activity;
@@ -54,6 +55,7 @@ public class ConditionAcitivity extends Activity implements
 	private ArrayList<WeiduBean> weidusLieShow = new ArrayList<>();
 	private ArrayList<ZhibiaoBean> zhibiaosShow = new ArrayList<>();
 	private ImageView back;
+	private boolean isOverWeidu, isOverZhibiao;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,7 @@ public class ConditionAcitivity extends Activity implements
 		weidu_lie.setOnClickListener(this);
 		weiduAdapter = new WeiduAdapter(this, weidus);
 		zhibiaoAdapter = new ZhibiaoAdapter(this, zhibiaos);
-
+		LoadingDialog.createLoadingDialog(this);
 		sendZhibiaoRequest();
 		sendWeiduRequest();
 	}
@@ -132,20 +134,32 @@ public class ConditionAcitivity extends Activity implements
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (weiduUUID.equals(uuid)) {
+			isOverWeidu = true;
 			weidus.clear();
 			weidus.addAll((Collection<? extends WeiduBean>) object);
 			weiduAdapter.notifyDataSetChanged();
 		}
 		if (zhibiaoUUID.equals(uuid)) {
+			isOverZhibiao = true;
 			zhibiaos.clear();
 			zhibiaos.addAll((Collection<? extends ZhibiaoBean>) object);
 			zhibiaoAdapter.notifyDataSetChanged();
 		}
+		if (isOverZhibiao && isOverWeidu)
+			LoadingDialog.dimmissLoading();
 
 	}
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
+		if (weiduUUID.equals(uuid)) {
+			isOverWeidu = true;
+		}
+		if (zhibiaoUUID.equals(uuid)) {
+			isOverZhibiao = true;
+		}
+		if (isOverZhibiao && isOverWeidu)
+			LoadingDialog.dimmissLoading();
 		Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 	}
 
@@ -203,24 +217,26 @@ public class ConditionAcitivity extends Activity implements
 			this.finish();
 			break;
 		case R.id.tofrom:
-			if(zhibiaosShow.size()>0&&(weidusHangShow.size()>0||weidusLieShow.size()>0)){
+			if (zhibiaosShow.size() > 0
+					&& (weidusHangShow.size() > 0 || weidusLieShow.size() > 0)) {
 				try {
 					FormActivity.startThis(this, getConditionJson());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-			}else {
+			} else {
 				Toast.makeText(this, "请正确选择！！！", 1000).show();
 			}
 			break;
 		case R.id.totu:
-			if(zhibiaosShow.size()>0&&(weidusHangShow.size()>0||weidusLieShow.size()>0)){
+			if (zhibiaosShow.size() > 0
+					&& (weidusHangShow.size() > 0 || weidusLieShow.size() > 0)) {
 				try {
 					TuActivity.startThis(this, getChatJson());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-			}else {
+			} else {
 				Toast.makeText(this, "请正确选择！！！", 1000).show();
 			}
 			break;
@@ -360,6 +376,7 @@ public class ConditionAcitivity extends Activity implements
 		objALL.put("params", WeiduArray);
 		return objALL.toString();
 	}
+
 	public String getChatJson() throws JSONException {
 		JSONObject obj = new JSONObject();
 		JSONArray zhibiaoArray = new JSONArray();
@@ -381,10 +398,10 @@ public class ConditionAcitivity extends Activity implements
 		obj.put("kpiJson", zhibiaoArray);
 
 		JSONObject objTable = new JSONObject();
-//		JSONArray arrayHang = new JSONArray();
-//		for (int i = 0; i < weidusHangShow.size(); i++) {
-			JSONObject weidusHangObj = new JSONObject();
-			if(weidusHangShow.size()>0){
+		// JSONArray arrayHang = new JSONArray();
+		// for (int i = 0; i < weidusHangShow.size(); i++) {
+		JSONObject weidusHangObj = new JSONObject();
+		if (weidusHangShow.size() > 0) {
 			WeiduBean weiduhangObj = weidusHangShow.get(0);
 			weidusHangObj.put("tid", weiduhangObj.tid);
 			weidusHangObj.put("valType", weiduhangObj.valType);
@@ -400,42 +417,42 @@ public class ConditionAcitivity extends Activity implements
 			weidusHangObj.put("dimdesc", weiduhangObj.text);
 			weidusHangObj.put("colname", weiduhangObj.col_name);
 			weidusHangObj.put("type", weiduhangObj.dim_type);
-//			arrayHang.put(weidusHangObj);
+			// arrayHang.put(weidusHangObj);
 		}
 		objTable.put("scol", weidusHangObj);
 		objTable.put("type", "line");
-//		JSONArray arrayLie = new JSONArray();
-//		for (int i = 0; i < weidusLieShow.size(); i++) {
-			JSONObject weidusLieObj = new JSONObject();
-			if(weidusLieShow.size()>0){
-				
-				WeiduBean weiduLieObj = weidusLieShow.get(0);
-				weidusLieObj.put("tid", weiduLieObj.tid);
-				weidusLieObj.put("valType", weiduLieObj.valType);
-				weidusLieObj.put("iscas", weiduLieObj.iscas);
-				weidusLieObj.put("grouptype", weiduLieObj.grouptype);
-				weidusLieObj.put("dim_name", weiduLieObj.dim_name);
-				weidusLieObj.put("dimord", weiduLieObj.dimord);
-				weidusLieObj.put("tableName", weiduLieObj.tableName);
-				weidusLieObj.put("tableColName", weiduLieObj.tableColName);
-				weidusLieObj.put("tableColKey", weiduLieObj.tableColKey);
-				weidusLieObj.put("tname", weiduLieObj.tname);
-				weidusLieObj.put("id", weiduLieObj.col_id);
-				weidusLieObj.put("dimdesc", weiduLieObj.text);
-				weidusLieObj.put("colname", weiduLieObj.col_name);
-				weidusLieObj.put("type", weiduLieObj.dim_type);
-			}
-//			arrayLie.put(weidusLieObj);
-//		}
-//		JSONObject weidusLieObjWei = new JSONObject();
-//		weidusLieObjWei.put("id", "kpi");
-//		weidusLieObjWei.put("type", "kpiOther");
-//		arrayLie.put(weidusLieObjWei);
+		// JSONArray arrayLie = new JSONArray();
+		// for (int i = 0; i < weidusLieShow.size(); i++) {
+		JSONObject weidusLieObj = new JSONObject();
+		if (weidusLieShow.size() > 0) {
+
+			WeiduBean weiduLieObj = weidusLieShow.get(0);
+			weidusLieObj.put("tid", weiduLieObj.tid);
+			weidusLieObj.put("valType", weiduLieObj.valType);
+			weidusLieObj.put("iscas", weiduLieObj.iscas);
+			weidusLieObj.put("grouptype", weiduLieObj.grouptype);
+			weidusLieObj.put("dim_name", weiduLieObj.dim_name);
+			weidusLieObj.put("dimord", weiduLieObj.dimord);
+			weidusLieObj.put("tableName", weiduLieObj.tableName);
+			weidusLieObj.put("tableColName", weiduLieObj.tableColName);
+			weidusLieObj.put("tableColKey", weiduLieObj.tableColKey);
+			weidusLieObj.put("tname", weiduLieObj.tname);
+			weidusLieObj.put("id", weiduLieObj.col_id);
+			weidusLieObj.put("dimdesc", weiduLieObj.text);
+			weidusLieObj.put("colname", weiduLieObj.col_name);
+			weidusLieObj.put("type", weiduLieObj.dim_type);
+		}
+		// arrayLie.put(weidusLieObj);
+		// }
+		// JSONObject weidusLieObjWei = new JSONObject();
+		// weidusLieObjWei.put("id", "kpi");
+		// weidusLieObjWei.put("type", "kpiOther");
+		// arrayLie.put(weidusLieObjWei);
 		objTable.put("xcol", weidusLieObj);
 
 		obj.put("chartJson", objTable);
 
-//		objALL.put("table", obj);
+		// objALL.put("table", obj);
 
 		JSONArray WeiduArray = new JSONArray();
 		for (int i = 0; i < weidusShow.size(); i++) {
@@ -455,7 +472,7 @@ public class ConditionAcitivity extends Activity implements
 			weidusObj.put("grouptype", weiduLieObj01.grouptype);
 			WeiduArray.put(weidusObj);
 		}
-//		objALL.put("params", WeiduArray);
+		// objALL.put("params", WeiduArray);
 		obj.put("params", WeiduArray);
 		return obj.toString();
 	}

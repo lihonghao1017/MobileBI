@@ -20,6 +20,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.LoginParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 
 public class LoginActivity extends Activity implements OnClickListener,
 		ServerCallbackInterface {
@@ -54,6 +55,7 @@ public class LoginActivity extends Activity implements OnClickListener,
 	public void onClick(View arg0) {
 		switch (arg0.getId()) {
 		case R.id.LoginActivity_commit:
+			LoadingDialog.createLoadingDialog(this);
 			sendData();
 			break;
 
@@ -83,6 +85,7 @@ public class LoginActivity extends Activity implements OnClickListener,
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
       if(LoginUUID.equals(uuid)){
+    	  LoadingDialog.dimmissLoading();
     	  UserBean userBean=new UserBean();
     	  userBean.name=et_username.getText().toString();
     	  userBean.pwd=et_pwd.getText().toString();
@@ -93,6 +96,9 @@ public class LoginActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
+		  if(LoginUUID.equals(uuid)){
+			  Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
+	    	  LoadingDialog.dimmissLoading();
+	      }
 	}
 }

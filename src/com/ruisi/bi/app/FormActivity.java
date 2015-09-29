@@ -21,6 +21,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.FormParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 
 public class FormActivity extends Activity implements ServerCallbackInterface {
 	private ListView ListView01;
@@ -42,6 +43,7 @@ public class FormActivity extends Activity implements ServerCallbackInterface {
 		TableRows = new ArrayList<>();
 		adapter = new TableAdapter(this, TableRows);
 		ListView01.setAdapter(adapter);
+		LoadingDialog.createLoadingDialog(this);
 		sendRequest();
 	}
 
@@ -64,6 +66,7 @@ public class FormActivity extends Activity implements ServerCallbackInterface {
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (formUUID.equals(uuid)) {
+			LoadingDialog.dimmissLoading();
 			TableRows.clear();
 			TableRows.addAll((Collection<? extends TableRow>) object);
 			adapter.notifyDataSetChanged();
@@ -85,6 +88,7 @@ public class FormActivity extends Activity implements ServerCallbackInterface {
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
 		if (formUUID.equals(uuid)) {
+			LoadingDialog.dimmissLoading();
 			Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 		}
 	}

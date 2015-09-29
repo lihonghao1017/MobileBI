@@ -23,6 +23,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.MenuParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 import com.ruisi.bi.app.view.MenuPopwindow;
 
 public class MenuActivity extends Activity implements ServerCallbackInterface,
@@ -44,6 +45,7 @@ public class MenuActivity extends Activity implements ServerCallbackInterface,
 		datas = new ArrayList<>();
 		mainAdapter = new MenuAdapter(this, datas);
 		lv.setAdapter(mainAdapter);
+		LoadingDialog.createLoadingDialog(this);
 		sendRequest();
 	}
 
@@ -68,6 +70,7 @@ public class MenuActivity extends Activity implements ServerCallbackInterface,
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (MenuUUID.equals(uuid)) {
+			LoadingDialog.dimmissLoading();
 			datas.clear();
 			datas.addAll((Collection<? extends MenuBean>) object);
 			mainAdapter.notifyDataSetChanged();
@@ -76,8 +79,10 @@ public class MenuActivity extends Activity implements ServerCallbackInterface,
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		if (MenuUUID.equals(uuid))
+		if (MenuUUID.equals(uuid)){
+			LoadingDialog.dimmissLoading();
 			Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
+		}
 	}
 
 	@Override

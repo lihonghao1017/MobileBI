@@ -27,6 +27,7 @@ import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
 import com.ruisi.bi.app.parser.TuLeidaParser;
+import com.ruisi.bi.app.view.LoadingDialog;
 import com.ruisi.bi.app.view.MyMarkerView;
 
 public class TuLeidaFragment extends Fragment implements
@@ -47,6 +48,7 @@ public class TuLeidaFragment extends Fragment implements
 		View v = inflater.inflate(R.layout.tu_leida_fragment, null);
 		mChart = (RadarChart) v.findViewById(R.id.chart1);
 		initLineChart();
+		LoadingDialog.createLoadingDialog(getActivity());
 		sendRequest();
 		return v;
 	}
@@ -68,20 +70,22 @@ public class TuLeidaFragment extends Fragment implements
 	}
 
 	private void initLineChart() {
-		tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Regular.ttf");
+		tf = Typeface.createFromAsset(getActivity().getAssets(),
+				"OpenSans-Regular.ttf");
 
-        mChart.setDescription("");
+		mChart.setDescription("");
 
-        mChart.setWebLineWidth(1.5f);
-        mChart.setWebLineWidthInner(0.75f);
-        mChart.setWebAlpha(100);
+		mChart.setWebLineWidth(1.5f);
+		mChart.setWebLineWidthInner(0.75f);
+		mChart.setWebAlpha(100);
 
-        // create a custom MarkerView (extend MarkerView) and specify the layout
-        // to use for it
-        MyMarkerView mv = new MyMarkerView(getActivity(), R.layout.custom_marker_view);
+		// create a custom MarkerView (extend MarkerView) and specify the layout
+		// to use for it
+		MyMarkerView mv = new MyMarkerView(getActivity(),
+				R.layout.custom_marker_view);
 
-        // set the marker to the chart
-        mChart.setMarkerView(mv);
+		// set the marker to the chart
+		mChart.setMarkerView(mv);
 	}
 
 	@Override
@@ -97,30 +101,34 @@ public class TuLeidaFragment extends Fragment implements
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (uuid.equals(bingxingUUID)) {
+			LoadingDialog.dimmissLoading();
 			mChart.setData((RadarData) object);
 
-	        mChart.invalidate();			
+			mChart.invalidate();
 			XAxis xAxis = mChart.getXAxis();
-	        xAxis.setTypeface(tf);
-	        xAxis.setTextSize(9f);
+			xAxis.setTypeface(tf);
+			xAxis.setTextSize(9f);
 
-	        YAxis yAxis = mChart.getYAxis();
-	        yAxis.setTypeface(tf);
-	        yAxis.setLabelCount(5, false);
-	        yAxis.setTextSize(9f);
-	        yAxis.setStartAtZero(true);
+			YAxis yAxis = mChart.getYAxis();
+			yAxis.setTypeface(tf);
+			yAxis.setLabelCount(5, false);
+			yAxis.setTextSize(9f);
+			yAxis.setStartAtZero(true);
 
-	        Legend l = mChart.getLegend();
-	        l.setPosition(LegendPosition.RIGHT_OF_CHART);
-	        l.setTypeface(tf);
-	        l.setXEntrySpace(7f);
-	        l.setYEntrySpace(5f);
+			Legend l = mChart.getLegend();
+			l.setPosition(LegendPosition.RIGHT_OF_CHART);
+			l.setTypeface(tf);
+			l.setXEntrySpace(7f);
+			l.setYEntrySpace(5f);
 		}
 	}
 
 	@Override
 	public void failedWithErrorInfo(ServerErrorMessage errorMessage, String uuid) {
-		if (uuid.equals(bingxingUUID))
-			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000).show();
+		if (uuid.equals(bingxingUUID)) {
+			Toast.makeText(this.getActivity(), errorMessage.getErrorDes(), 1000)
+					.show();
+			LoadingDialog.dimmissLoading();
+		}
 	}
 }

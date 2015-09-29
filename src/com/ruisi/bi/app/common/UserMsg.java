@@ -31,4 +31,7 @@ public class UserMsg {
 	public static String getName(){
 		return sp.getString("name", null);
 	}
+	public static void clearAccount(){
+		sp.edit().clear().commit();
+	}
 }
