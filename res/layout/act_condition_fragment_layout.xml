@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="多维分析"
+            android:text="查询条件"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="11dp"
-                android:text="维    度:" />
+                android:text="维    度（横轴）:" />
 
             <Button
                 android:id="@+id/ConditionFragment_Weidu_actv"
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="11dp"
-                android:text="行标签:" />
+                android:text="行标签（图例）:" />
 
             <Button
                 android:id="@+id/ConditionFragment_Weidu_hang_actv"
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="11dp"
-                android:text="列标签:" />
+                android:text="列标签（纵轴）:" />
 
             <Button
                 android:id="@+id/ConditionFragment_Weidu_lie_actv"
