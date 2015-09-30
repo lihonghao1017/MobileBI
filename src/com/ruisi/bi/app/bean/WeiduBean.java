@@ -1,5 +1,7 @@
 package com.ruisi.bi.app.bean;
 
+import java.util.ArrayList;
+
 public class WeiduBean {
 	public boolean  isChecked;
 	public int col_id;
@@ -43,5 +45,12 @@ public class WeiduBean {
 
 	public String tname;
 	public String tableColName;
+	
+	
+	
+	public String type;
+	public String value;
+	public String name;
+	public ArrayList<WeiduOptionBean> options;
 
 }

@@ -1,6 +1,6 @@
 package com.ruisi.bi.app.bean;
 
-public class FormParamsOptionsBean {
+public class WeiduOptionBean {
 public String value;
 public String text;
 }
