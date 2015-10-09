@@ -1,5 +1,6 @@
 package com.ruisi.bi.app.fragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,7 +27,9 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.ruisi.bi.app.R;
+import com.ruisi.bi.app.adapter.OptionAdapter;
 import com.ruisi.bi.app.bean.RequestVo;
+import com.ruisi.bi.app.bean.WeiduOptionBean;
 import com.ruisi.bi.app.common.APIContext;
 import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
@@ -38,6 +42,10 @@ public class TuQuxianFragment extends Fragment implements
 	private LineChart mChart;
 	private String quxianUUID;
 	private String requestJson;
+	
+	private Spinner spinner;
+	private OptionAdapter oAdapter;
+	private ArrayList<WeiduOptionBean> options;
 
 	public TuQuxianFragment(String requestJson) {
 		this.requestJson = requestJson;
@@ -48,6 +56,10 @@ public class TuQuxianFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.tu_quxian_fragment, null);
 		mChart = (LineChart) v.findViewById(R.id.chart1);
+		spinner=(Spinner) v.findViewById(R.id.quxian_spinner);
+		options=new ArrayList<>();
+		oAdapter=new OptionAdapter(getActivity(), options);
+		spinner.setAdapter(oAdapter);
 		initLineChart();
 		LoadingDialog.createLoadingDialog(getActivity());
 		sendRequest();
@@ -158,6 +170,11 @@ public class TuQuxianFragment extends Fragment implements
 	@Override
 	public void onValueSelected(Entry arg0, int arg1, Highlight arg2) {
 
+	}
+	public void onClick(View v){
+		if (v.getId()==R.id.quxian_check) {
+			
+		}
 	}
 
 }

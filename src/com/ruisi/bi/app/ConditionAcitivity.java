@@ -450,10 +450,7 @@ public class ConditionAcitivity extends Activity implements
 		// arrayLie.put(weidusLieObjWei);
 		objTable.put("xcol", weidusLieObj);
 
-		obj.put("chartJson", objTable);
-
-		// objALL.put("table", obj);
-
+		
 		JSONArray WeiduArray = new JSONArray();
 		for (int i = 0; i < weidusShow.size(); i++) {
 			JSONObject weidusObj = new JSONObject();
@@ -472,8 +469,14 @@ public class ConditionAcitivity extends Activity implements
 			weidusObj.put("grouptype", weiduLieObj01.grouptype);
 			WeiduArray.put(weidusObj);
 		}
+		objTable.put("params", WeiduArray);
+		obj.put("chartJson", objTable);
+
+		// objALL.put("table", obj);
+
+	
 		// objALL.put("params", WeiduArray);
-		obj.put("params", WeiduArray);
+//		obj.put("params", WeiduArray);
 		return obj.toString();
 	}
 

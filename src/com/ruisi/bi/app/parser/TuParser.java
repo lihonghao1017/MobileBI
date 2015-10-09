@@ -17,6 +17,8 @@ import com.ruisi.bi.app.adapter.TableAdapter.TableRow;
 import com.ruisi.bi.app.adapter.TableAdapter.TableRowHead;
 import com.ruisi.bi.app.bean.FormDataChildBean;
 import com.ruisi.bi.app.bean.QuxianBean;
+import com.ruisi.bi.app.bean.WeiduBean;
+import com.ruisi.bi.app.bean.WeiduOptionBean;
 import com.ruisi.bi.app.bean.YVals;
 import com.ruisi.bi.app.bean.YValsEntry;
 
@@ -28,6 +30,31 @@ public class TuParser extends BaseParser {
 		if (jsonStr != null) {
 			JSONObject obj = new JSONObject(jsonStr);
 			JSONArray objArray = obj.getJSONArray("comps");
+			
+			ArrayList<WeiduBean> options = new ArrayList<>();
+			JSONArray paramsArray = obj.getJSONArray("params");
+			for (int i = 0; i < paramsArray.length(); i++) {
+				JSONObject paramsObj = paramsArray.getJSONObject(i);
+				WeiduBean weiduBean = new WeiduBean();
+				if (paramsObj.getString("name").toString().equals("null"))
+					weiduBean.name = "";
+				else
+					weiduBean.name = paramsObj.getString("name");
+				weiduBean.type = paramsObj.getString("type");
+				weiduBean.value = paramsObj.getString("value");
+				ArrayList<WeiduOptionBean> optionList=new ArrayList<>();
+				JSONArray optionArray = paramsObj.getJSONArray("options");
+				for (int j = 0; j < optionArray.length(); j++) {
+					JSONObject optionObj = optionArray.getJSONObject(j);
+					WeiduOptionBean optionBean=new WeiduOptionBean();
+					optionBean.text=optionObj.getString("text");
+					optionBean.value=optionObj.getString("value");
+					optionList.add(optionBean);
+				}
+				weiduBean.options = optionList;
+				options.add(weiduBean);
+			}
+			
 			for (int i = 0; i < objArray.length(); i++) {
 				JSONObject objdata = objArray.getJSONObject(i);
 				JSONArray headArray = objdata.getJSONArray("yVals");
