@@ -1,6 +1,7 @@
 package com.ruisi.bi.app.fragment;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -46,6 +49,7 @@ public class TuQuxianFragment extends Fragment implements
 	private Spinner spinner;
 	private OptionAdapter oAdapter;
 	private ArrayList<WeiduOptionBean> options;
+	private Button check;
 
 	public TuQuxianFragment(String requestJson) {
 		this.requestJson = requestJson;
@@ -60,6 +64,8 @@ public class TuQuxianFragment extends Fragment implements
 		options=new ArrayList<>();
 		oAdapter=new OptionAdapter(getActivity(), options);
 		spinner.setAdapter(oAdapter);
+		
+		check=(Button) v.findViewById(R.id.quxian_check);
 		initLineChart();
 		LoadingDialog.createLoadingDialog(getActivity());
 		sendRequest();
@@ -111,8 +117,14 @@ public class TuQuxianFragment extends Fragment implements
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
 		if (uuid.equals(quxianUUID)) {
+			ArrayList<Object> dataR=(ArrayList<Object>) object;
+			spinner.setVisibility(View.VISIBLE);
+			check.setVisibility(View.VISIBLE);
+			options.clear();
+			options.addAll((Collection<? extends WeiduOptionBean>) dataR.get(0));
+			oAdapter.notifyDataSetChanged();
 			LoadingDialog.dimmissLoading();
-			mChart.setData((LineData) object);
+			mChart.setData((LineData) dataR.get(1));
 			updataChart();
 		}
 	}

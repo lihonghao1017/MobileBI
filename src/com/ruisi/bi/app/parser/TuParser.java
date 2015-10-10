@@ -27,7 +27,9 @@ public class TuParser extends BaseParser {
 	@Override
 	public <T> T parse(String jsonStr) throws JSONException {
 		 LineData data = null;
+		 ArrayList<Object> dataR=null;
 		if (jsonStr != null) {
+			dataR=new ArrayList<>();
 			JSONObject obj = new JSONObject(jsonStr);
 			JSONArray objArray = obj.getJSONArray("comps");
 			
@@ -54,7 +56,7 @@ public class TuParser extends BaseParser {
 				weiduBean.options = optionList;
 				options.add(weiduBean);
 			}
-			
+			dataR.add(options);
 			for (int i = 0; i < objArray.length(); i++) {
 				JSONObject objdata = objArray.getJSONObject(i);
 				JSONArray headArray = objdata.getJSONArray("yVals");
@@ -88,9 +90,9 @@ public class TuParser extends BaseParser {
 				data.setValueTextColor(Color.WHITE);
 				data.setValueTextSize(9f);
 			}
+			dataR.add(data);
 		}
-
-		return (T) data;
+		return (T) dataR;
 	}
 
 }

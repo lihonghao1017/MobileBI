@@ -45,10 +45,9 @@ public class FormActivity extends Activity implements ServerCallbackInterface,
 	private OptionAdapter oAdapter01, oAdapter02;
 	private ArrayList<WeiduOptionBean> options01, options02;
 	private TextView option_name;
-	private Button FormActivity_check;
-	private String shaixuan01,shaixuan02;
-	private int index01,index02;
-	private boolean isFirst=true;
+	private String shaixuan01, shaixuan02;
+	private int index01, index02;
+	private boolean isFirst = true;
 
 	public static void startThis(Context context, String strJson) {
 		strJsons = strJson;
@@ -61,7 +60,7 @@ public class FormActivity extends Activity implements ServerCallbackInterface,
 		setContentView(R.layout.form_fragment_layout);
 		spinner01 = (Spinner) findViewById(R.id.FormActivity_spinner01);
 		spinner02 = (Spinner) findViewById(R.id.FormActivity_spinner02);
-		
+
 		spinner02.setOnItemSelectedListener(this);
 		spinner01.setOnItemSelectedListener(this);
 		options01 = new ArrayList<>();
@@ -105,13 +104,13 @@ public class FormActivity extends Activity implements ServerCallbackInterface,
 			TableRows.addAll(formBean.TableRows);
 			adapter.notifyDataSetChanged();
 			Toast.makeText(this, "成功", 2000).show();
-
+			findViewById(R.id.FormActivity_check).setVisibility(View.VISIBLE);
 			if (formBean.options.size() == 1) {
 				options01.clear();
 				spinner01.setVisibility(View.VISIBLE);
 				options01.addAll(formBean.options.get(0).options);
 				oAdapter01.notifyDataSetChanged();
-				spinner01.setSelection(index01,true);
+				spinner01.setSelection(index01, true);
 				option_name.setText(formBean.options.get(0).name);
 			}
 			if (formBean.options.size() >= 2) {
@@ -124,10 +123,10 @@ public class FormActivity extends Activity implements ServerCallbackInterface,
 				options02.addAll(formBean.options.get(1).options);
 				oAdapter01.notifyDataSetChanged();
 				oAdapter02.notifyDataSetChanged();
-					spinner01.setSelection(index01,true);
-					spinner02.setSelection(index02,true);
+				spinner01.setSelection(index01, true);
+				spinner02.setSelection(index02, true);
 			}
-			isFirst=false;
+			isFirst = false;
 		}
 	}
 
@@ -155,51 +154,55 @@ public class FormActivity extends Activity implements ServerCallbackInterface,
 			long id) {
 		switch (parent.getId()) {
 		case R.id.FormActivity_spinner01:
-			index01=position;
-			shaixuan01=options01.get(position).value;
+			index01 = position;
+			shaixuan01 = options01.get(position).value;
 			break;
 		case R.id.FormActivity_spinner02:
-			index02=position;
-			shaixuan02=options02.get(position).value;
+			index02 = position;
+			shaixuan02 = options02.get(position).value;
 			break;
 		}
 	}
-private void setParams(){
-	if (spinner01.getVisibility()==View.VISIBLE&&spinner02.getVisibility()==View.VISIBLE) {
-		if(shaixuan01==null){
-			Toast.makeText(this, "第一个未选择", 1000).show();
+
+	private void setParams() {
+		if (spinner01.getVisibility() == View.VISIBLE
+				&& spinner02.getVisibility() == View.VISIBLE) {
+			if (shaixuan01 == null) {
+				Toast.makeText(this, "第一个未选择", 1000).show();
+				return;
+			}
+			if (shaixuan02 == null) {
+				Toast.makeText(this, "第二个未选择", 1000).show();
+				return;
+			}
+			if (isFirst) {
+				return;
+			}
+			try {
+				JSONObject obj = new JSONObject(strJsons);
+				obj.getJSONArray("params").getJSONObject(0)
+						.put("vals", shaixuan01 + "," + shaixuan02);
+				strJsons = obj.toString();
+				sendRequest();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			return;
 		}
-		if(shaixuan02==null){
-			Toast.makeText(this, "第二个未选择", 1000).show();
+		if (spinner01.getVisibility() == View.VISIBLE) {
+			try {
+				JSONObject obj = new JSONObject(strJsons);
+				obj.getJSONArray("params").getJSONObject(0)
+						.put("vals", shaixuan01);
+				strJsons = obj.toString();
+				sendRequest();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			return;
 		}
-		if(isFirst){
-			return;
-		}
-		try {
-			JSONObject obj=new JSONObject(strJsons);
-			obj.getJSONArray("params").getJSONObject(0).put("vals", shaixuan01+","+shaixuan02);
-			strJsons=obj.toString();
-			sendRequest();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return;
+
 	}
-	if (spinner01.getVisibility()==View.VISIBLE) {
-		try {
-			JSONObject obj=new JSONObject(strJsons);
-			obj.getJSONArray("params").getJSONObject(0).put("vals", shaixuan01);
-			strJsons=obj.toString();
-			sendRequest();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return;
-	}
-	
-}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
