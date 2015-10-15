@@ -17,20 +17,51 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.PercentFormatter;
+import com.ruisi.bi.app.bean.WeiduBean;
+import com.ruisi.bi.app.bean.WeiduOptionBean;
 
 public class TuBingxingParser extends BaseParser {
 
 	@Override
 	public <T> T parse(String jsonStr) throws JSONException {
 		PieData data = null;
+		 ArrayList<Object> dataR=null;
 		if (jsonStr != null) {
+			dataR=new ArrayList<>();
 			JSONObject obj = new JSONObject(jsonStr);
+			ArrayList<WeiduBean> options = new ArrayList<>();
+			JSONArray paramsArray = obj.optJSONArray("params");
+			if(paramsArray!=null)
+			for (int i = 0; i < paramsArray.length(); i++) {
+				JSONObject paramsObj = paramsArray.getJSONObject(i);
+				WeiduBean weiduBean = new WeiduBean();
+				if (paramsObj.getString("name").toString().equals("null"))
+					weiduBean.name = "";
+				else
+					weiduBean.name = paramsObj.getString("name");
+				weiduBean.type = paramsObj.getString("type");
+				weiduBean.value = paramsObj.getString("value");
+				ArrayList<WeiduOptionBean> optionList=new ArrayList<>();
+				JSONArray optionArray = paramsObj.getJSONArray("options");
+				for (int j = 0; j < optionArray.length(); j++) {
+					JSONObject optionObj = optionArray.getJSONObject(j);
+					WeiduOptionBean optionBean=new WeiduOptionBean();
+					optionBean.text=optionObj.getString("text");
+					optionBean.value=optionObj.getString("value");
+					optionList.add(optionBean);
+				}
+				weiduBean.options = optionList;
+				options.add(weiduBean);
+			}
+			dataR.add(options);
+			
 			JSONArray objArray = obj.getJSONArray("comps");
 			for (int i = 0; i < objArray.length(); i++) {
 				JSONObject objdata = objArray.getJSONObject(i);
 				JSONArray headArray = objdata.getJSONArray("yVals");
 				ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 				for (int j = 0; j < headArray.length(); j++) {
+					if (j>5)break;
 					JSONObject yObj = headArray.getJSONObject(j);
 					yVals1.add(new Entry(yObj.getInt("value"), yObj
 							.getInt("index")));
@@ -38,6 +69,7 @@ public class TuBingxingParser extends BaseParser {
 				JSONArray xArray = objdata.getJSONArray("xVals");
 				ArrayList<String> xVals = new ArrayList<String>();
 				for (int j = 0; j < xArray.length(); j++) {
+					if (j>5)break;
 					xVals.add(xArray.getString(j));
 				}
 				PieDataSet dataSet = new PieDataSet(yVals1, "Election Results");
@@ -68,9 +100,10 @@ public class TuBingxingParser extends BaseParser {
 			        data.setValueTextSize(11f);
 			        data.setValueTextColor(Color.WHITE);
 			}
+			dataR.add(data);
 		}
 
-		return (T) data;
+		return (T) dataR;
 	}
 
 }

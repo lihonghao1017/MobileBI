@@ -10,6 +10,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
@@ -29,6 +30,7 @@ public class AppContext extends Application {
 	private static DisplayImageOptions options;
 	public static int video_progress;
 	public static String avatarImageName;
+	public static int[] colors=new int[6];
 
 	@Override
 	public void onCreate() {
@@ -40,6 +42,12 @@ public class AppContext extends Application {
 		super.onCreate();
 		UserMsg.initUserMsg(this);
 		initImageLoader(getApplicationContext());
+		colors[0]=Color.RED;
+		colors[1]=Color.YELLOW;
+		colors[2]=Color.GREEN;
+		colors[3]=Color.BLACK;
+		colors[4]=Color.BLUE;
+		colors[5]=Color.CYAN;
 	}
 
 	public static void initImageLoader(Context context) {

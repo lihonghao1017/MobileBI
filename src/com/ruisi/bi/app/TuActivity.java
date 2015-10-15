@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.ruisi.bi.app.fragment.TuBingxingFragment;
@@ -23,9 +25,9 @@ import com.ruisi.bi.app.fragment.TuLeidaFragment;
 import com.ruisi.bi.app.fragment.TuQuxianFragment;
 import com.ruisi.bi.app.fragment.TuTiaoxingFragment;
 import com.ruisi.bi.app.fragment.TuZhuxingFragment;
+import com.ruisi.bi.app.view.SelectTuPopWindow;
 
-public class TuActivity extends FragmentActivity implements
-		OnItemSelectedListener {
+public class TuActivity extends FragmentActivity {
 	private static String strJsons;
 	private FrameLayout container;
 	private TuQuxianFragment quxianFragment;
@@ -35,6 +37,8 @@ public class TuActivity extends FragmentActivity implements
 	private TuLeidaFragment leidaFragment;
 	private FragmentManager fm;
 	private FragmentTransaction ft;
+	private ImageView select;
+	
 
 	public static void startThis(Context context, String strJson) {
 		strJsons = strJson;
@@ -46,23 +50,8 @@ public class TuActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tu_activity_layout);
 		container = (FrameLayout) findViewById(R.id.TuActivity_container);
-
-		ArrayList data_list = new ArrayList<String>();
-		data_list.add("曲线图");
-		data_list.add("柱状图");
-		data_list.add("饼图");
-		data_list.add("条形图");
-		data_list.add("面积图");
-		data_list.add("雷达图");
-
-		ArrayAdapter arr_adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, data_list);
-		arr_adapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		((Spinner) findViewById(R.id.TuActivity_spinner))
-				.setAdapter(arr_adapter);
-		((Spinner) findViewById(R.id.TuActivity_spinner))
-				.setOnItemSelectedListener(this);
+		select=(ImageView) findViewById(R.id.select);
+		
 		initFragments();
 	}
 
@@ -82,6 +71,10 @@ public class TuActivity extends FragmentActivity implements
 		case R.id.back:
 			finish();
 			break;
+		case R.id.select:
+			SelectTuPopWindow.getMenuPopwindow(this, container);
+			break;
+
 
 		default:
 			break;
@@ -101,9 +94,7 @@ public class TuActivity extends FragmentActivity implements
 		return null;
 	}
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemSelected(int position) {
 		switch (position) {
 		case 0:
 			ft = fm.beginTransaction();
@@ -121,22 +112,17 @@ public class TuActivity extends FragmentActivity implements
 			ft = fm.beginTransaction();
 			ft.replace(R.id.TuActivity_container, tiaoxingFragment).commit();
 			break;
-		case 4:
+//		case 4:
 //			ft = fm.beginTransaction();
 //			ft.replace(R.id.TuActivity_container, bingxingFragment).commit();
-			break;
-		case 5:
+//			break;
+		case 4:
 			ft = fm.beginTransaction();
 			ft.replace(R.id.TuActivity_container, leidaFragment).commit();
 			break;
 		default:
 			break;
 		}
-
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
 
 	}
 

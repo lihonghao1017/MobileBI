@@ -104,8 +104,8 @@ public class FormActivity extends Activity implements ServerCallbackInterface,
 			TableRows.addAll(formBean.TableRows);
 			adapter.notifyDataSetChanged();
 			Toast.makeText(this, "成功", 2000).show();
-			findViewById(R.id.FormActivity_check).setVisibility(View.VISIBLE);
 			if (formBean.options.size() == 1) {
+				findViewById(R.id.FormActivity_check).setVisibility(View.VISIBLE);
 				options01.clear();
 				spinner01.setVisibility(View.VISIBLE);
 				options01.addAll(formBean.options.get(0).options);
@@ -114,6 +114,7 @@ public class FormActivity extends Activity implements ServerCallbackInterface,
 				option_name.setText(formBean.options.get(0).name);
 			}
 			if (formBean.options.size() >= 2) {
+				findViewById(R.id.FormActivity_check).setVisibility(View.VISIBLE);
 				options01.clear();
 				options02.clear();
 				spinner01.setVisibility(View.VISIBLE);

@@ -21,6 +21,7 @@ import com.ruisi.bi.app.bean.WeiduBean;
 import com.ruisi.bi.app.bean.WeiduOptionBean;
 import com.ruisi.bi.app.bean.YVals;
 import com.ruisi.bi.app.bean.YValsEntry;
+import com.ruisi.bi.app.common.AppContext;
 
 public class TuParser extends BaseParser {
 
@@ -34,7 +35,8 @@ public class TuParser extends BaseParser {
 			JSONArray objArray = obj.getJSONArray("comps");
 			
 			ArrayList<WeiduBean> options = new ArrayList<>();
-			JSONArray paramsArray = obj.getJSONArray("params");
+			JSONArray paramsArray = obj.optJSONArray("params");
+			if(paramsArray!=null)
 			for (int i = 0; i < paramsArray.length(); i++) {
 				JSONObject paramsObj = paramsArray.getJSONObject(i);
 				WeiduBean weiduBean = new WeiduBean();
@@ -62,16 +64,18 @@ public class TuParser extends BaseParser {
 				JSONArray headArray = objdata.getJSONArray("yVals");
 				ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
 				for (int j = 0; j < headArray.length(); j++) {
+					if (j>5)break;
 					JSONObject itemData = headArray.getJSONObject(j);
 					JSONArray itemArray = itemData.getJSONArray("Entry");
 					ArrayList<Entry> yVals2 = new ArrayList<Entry>();
 					for (int k = 0; k < itemArray.length(); k++) {
+						if (k>5)break;
 						JSONObject entryData = itemArray.getJSONObject(k);
 						yVals2.add(new Entry(entryData.getInt("value"), entryData.getInt("xIndex")));
 					}
 					 LineDataSet set2 = new LineDataSet(yVals2, itemData.getString("label"));
 				        set2.setAxisDependency(AxisDependency.RIGHT);
-				        set2.setColor(Color.RED);
+				        set2.setColor(AppContext.colors[j]);
 				        set2.setCircleColor(Color.WHITE);
 				        set2.setLineWidth(2f);
 				        set2.setCircleSize(3f);
@@ -84,10 +88,11 @@ public class TuParser extends BaseParser {
 				JSONArray xValsArray = objdata.getJSONArray("xVals");
 				ArrayList<String> xVals = new ArrayList<String>();
 				for (int j = 0; j < xValsArray.length(); j++) {
+					if (j>5)break;
 					xVals.add(xValsArray.getString(j));
 				}
 				data = new LineData(xVals, dataSets);
-				data.setValueTextColor(Color.WHITE);
+				data.setValueTextColor(Color.TRANSPARENT);
 				data.setValueTextSize(9f);
 			}
 			dataR.add(data);

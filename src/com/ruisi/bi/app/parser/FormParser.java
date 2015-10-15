@@ -24,7 +24,8 @@ public class FormParser extends BaseParser {
 			JSONObject obj = new JSONObject(jsonStr);
 			JSONArray objArray = obj.getJSONArray("comps");
 			ArrayList<WeiduBean> options = new ArrayList<>();
-			JSONArray paramsArray = obj.getJSONArray("params");
+			JSONArray paramsArray = obj.optJSONArray("params");
+			if(paramsArray!=null)
 			for (int i = 0; i < paramsArray.length(); i++) {
 				JSONObject paramsObj = paramsArray.getJSONObject(i);
 				WeiduBean weiduBean = new WeiduBean();

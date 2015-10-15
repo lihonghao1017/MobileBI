@@ -398,8 +398,6 @@ public class ConditionAcitivity extends Activity implements
 		obj.put("kpiJson", zhibiaoArray);
 
 		JSONObject objTable = new JSONObject();
-		// JSONArray arrayHang = new JSONArray();
-		// for (int i = 0; i < weidusHangShow.size(); i++) {
 		JSONObject weidusHangObj = new JSONObject();
 		if (weidusHangShow.size() > 0) {
 			WeiduBean weiduhangObj = weidusHangShow.get(0);
@@ -417,15 +415,11 @@ public class ConditionAcitivity extends Activity implements
 			weidusHangObj.put("dimdesc", weiduhangObj.text);
 			weidusHangObj.put("colname", weiduhangObj.col_name);
 			weidusHangObj.put("type", weiduhangObj.dim_type);
-			// arrayHang.put(weidusHangObj);
 		}
-		objTable.put("scol", weidusHangObj);
+		objTable.put("xcol", weidusHangObj);
 		objTable.put("type", "line");
-		// JSONArray arrayLie = new JSONArray();
-		// for (int i = 0; i < weidusLieShow.size(); i++) {
 		JSONObject weidusLieObj = new JSONObject();
 		if (weidusLieShow.size() > 0) {
-
 			WeiduBean weiduLieObj = weidusLieShow.get(0);
 			weidusLieObj.put("tid", weiduLieObj.tid);
 			weidusLieObj.put("valType", weiduLieObj.valType);
@@ -442,15 +436,7 @@ public class ConditionAcitivity extends Activity implements
 			weidusLieObj.put("colname", weiduLieObj.col_name);
 			weidusLieObj.put("type", weiduLieObj.dim_type);
 		}
-		// arrayLie.put(weidusLieObj);
-		// }
-		// JSONObject weidusLieObjWei = new JSONObject();
-		// weidusLieObjWei.put("id", "kpi");
-		// weidusLieObjWei.put("type", "kpiOther");
-		// arrayLie.put(weidusLieObjWei);
-		objTable.put("xcol", weidusLieObj);
-
-		
+		objTable.put("scol", weidusLieObj);
 		JSONArray WeiduArray = new JSONArray();
 		for (int i = 0; i < weidusShow.size(); i++) {
 			JSONObject weidusObj = new JSONObject();
@@ -471,12 +457,6 @@ public class ConditionAcitivity extends Activity implements
 		}
 		objTable.put("params", WeiduArray);
 		obj.put("chartJson", objTable);
-
-		// objALL.put("table", obj);
-
-	
-		// objALL.put("params", WeiduArray);
-//		obj.put("params", WeiduArray);
 		return obj.toString();
 	}
 

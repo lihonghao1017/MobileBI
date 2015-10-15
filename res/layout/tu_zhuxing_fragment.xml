@@ -3,6 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/zhuxing_option_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:visibility="gone"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/zhuxing_spinner01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/zhuxing_spinner02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone" />
+        <Button android:id="@+id/zhuxing_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查询"
+              android:visibility="gone" 
+            android:textColor="@android:color/black"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+   
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart2"

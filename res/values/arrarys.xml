@@ -5,7 +5,14 @@
         <item >修改密码</item>
     </string-array>
     <string-array name="menus_icon">
-        <item >@@mipmap/zhuxiao_icon</item>
+        <item >@mipmap/zhuxiao_icon</item>
         <item >@mipmap/xiugai_mima</item>
+    </string-array>
+     <string-array name="select_tu">
+        <item >曲线图</item>
+        <item >柱形图</item>
+         <item >饼图</item>
+          <item >条形图</item>
+          <item >雷达图</item>
     </string-array>
 </resources>
