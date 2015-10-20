@@ -14,7 +14,7 @@ public class APIContext {
 	/** GET请求方式 */
 	public static final String GET = "GET";
 
-	/** ======================接口基地�?=============================== */
+	/** ======================接口基地�?=============================== */
 
 	public static final String HOST = "http://112.124.13.251:8081/bi/";
 	
@@ -30,5 +30,6 @@ public class APIContext {
 	public static final String Weidu="app/Cube!getDim.action";
 	public static final String form="app/CompView!viewTable.action";
 	public static final String tu="app/CompView!viewChart.action";
+	public static final String shaixuan="app/DimFilter.action";
 	
 }

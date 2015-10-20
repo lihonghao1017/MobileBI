@@ -9,34 +9,38 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Toast;
+
 import com.ruisi.bi.app.adapter.WeiduAdapter;
 import com.ruisi.bi.app.adapter.WeiduShowAdapter;
 import com.ruisi.bi.app.adapter.ZhibiaoAdapter;
 import com.ruisi.bi.app.adapter.ZhibiaoShowAdapter;
 import com.ruisi.bi.app.bean.RequestVo;
 import com.ruisi.bi.app.bean.WeiduBean;
+import com.ruisi.bi.app.bean.WeiduOptionBean;
 import com.ruisi.bi.app.bean.ZhibiaoBean;
 import com.ruisi.bi.app.common.APIContext;
 import com.ruisi.bi.app.net.ServerCallbackInterface;
 import com.ruisi.bi.app.net.ServerEngine;
 import com.ruisi.bi.app.net.ServerErrorMessage;
+import com.ruisi.bi.app.parser.ShaixuanParser;
 import com.ruisi.bi.app.parser.WeiduParser;
 import com.ruisi.bi.app.parser.ZhibiaoParser;
 import com.ruisi.bi.app.view.LoadingDialog;
 import com.ruisi.bi.app.view.MyPopwindow;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.ruisi.bi.app.view.ShaixuanPopwindow;
 
 public class ConditionAcitivity extends Activity implements
-		ServerCallbackInterface, OnClickListener {
+		ServerCallbackInterface, OnClickListener, OnItemClickListener {
 
 	public int ThemeId;
 	private String zhibiaoUUID = "", weiduUUID = "";
@@ -74,6 +78,8 @@ public class ConditionAcitivity extends Activity implements
 		weidu_hang_lv = (ListView) findViewById(R.id.ConditionFragment_Weidu_hang_listview);
 		weidu_lie_lv = (ListView) findViewById(R.id.ConditionFragment_Weidu_lie_listview);
 		zhibiao_lv = (ListView) findViewById(R.id.ConditionFragment_Weidu_zhibiao_listview);
+		weidu_hang_lv.setOnItemClickListener(this);
+		weidu_lie_lv.setOnItemClickListener(this);
 
 		weiduShowAdapter = new WeiduShowAdapter(this, weidusShow);
 		weidu_lv.setAdapter(weiduShowAdapter);
@@ -133,11 +139,19 @@ public class ConditionAcitivity extends Activity implements
 
 	@Override
 	public <T> void succeedReceiveData(T object, String uuid) {
+		if(shaixuan.equals(uuid)){
+			
+			ShaixuanPopwindow.getShaixuanPopwindow(this, (ArrayList<WeiduOptionBean>)object, back, head_text);
+			LoadingDialog.dimmissLoading();
+			return;
+		}
+
 		if (weiduUUID.equals(uuid)) {
 			isOverWeidu = true;
 			weidus.clear();
 			weidus.addAll((Collection<? extends WeiduBean>) object);
 			weiduAdapter.notifyDataSetChanged();
+			
 		}
 		if (zhibiaoUUID.equals(uuid)) {
 			isOverZhibiao = true;
@@ -145,9 +159,11 @@ public class ConditionAcitivity extends Activity implements
 			zhibiaos.addAll((Collection<? extends ZhibiaoBean>) object);
 			zhibiaoAdapter.notifyDataSetChanged();
 		}
-		if (isOverZhibiao && isOverWeidu)
+		if (isOverZhibiao && isOverWeidu){
 			LoadingDialog.dimmissLoading();
-
+			return;
+		}
+		
 	}
 
 	@Override
@@ -159,6 +175,8 @@ public class ConditionAcitivity extends Activity implements
 			isOverZhibiao = true;
 		}
 		if (isOverZhibiao && isOverWeidu)
+			LoadingDialog.dimmissLoading();
+		if(shaixuan.equals(uuid))
 			LoadingDialog.dimmissLoading();
 		Toast.makeText(this, errorMessage.getErrorDes(), 1000).show();
 	}
@@ -317,6 +335,9 @@ public class ConditionAcitivity extends Activity implements
 			weidusHangObj.put("tableColName", weiduhangObj.tableColName);
 			weidusHangObj.put("tableColKey", weiduhangObj.tableColKey);
 			weidusHangObj.put("tname", weiduhangObj.tname);
+			if (vat_hang!=null&&!vat_hang.equals("")) {
+				weidusHangObj.put("vals", vat_hang);
+			}
 			weidusHangObj.put("id", weiduhangObj.col_id);
 			weidusHangObj.put("dimdesc", weiduhangObj.text);
 			weidusHangObj.put("colname", weiduhangObj.col_name);
@@ -340,6 +361,9 @@ public class ConditionAcitivity extends Activity implements
 			weidusLieObj.put("tableColKey", weiduLieObj.tableColKey);
 			weidusLieObj.put("tname", weiduLieObj.tname);
 			weidusLieObj.put("id", weiduLieObj.col_id);
+			if (vat_lie!=null&&!vat_lie.equals("")) {
+				weidusLieObj.put("vals", vat_lie);
+			}
 			weidusLieObj.put("dimdesc", weiduLieObj.text);
 			weidusLieObj.put("colname", weiduLieObj.col_name);
 			weidusLieObj.put("type", weiduLieObj.dim_type);
@@ -412,6 +436,9 @@ public class ConditionAcitivity extends Activity implements
 			weidusHangObj.put("tableColKey", weiduhangObj.tableColKey);
 			weidusHangObj.put("tname", weiduhangObj.tname);
 			weidusHangObj.put("id", weiduhangObj.col_id);
+			if (vat_hang!=null&&!vat_hang.equals("")) {
+				weidusHangObj.put("vals", vat_hang);
+			}
 			weidusHangObj.put("dimdesc", weiduhangObj.text);
 			weidusHangObj.put("colname", weiduhangObj.col_name);
 			weidusHangObj.put("type", weiduhangObj.dim_type);
@@ -432,6 +459,9 @@ public class ConditionAcitivity extends Activity implements
 			weidusLieObj.put("tableColKey", weiduLieObj.tableColKey);
 			weidusLieObj.put("tname", weiduLieObj.tname);
 			weidusLieObj.put("id", weiduLieObj.col_id);
+			if (vat_lie!=null&&!vat_lie.equals("")) {
+				weidusLieObj.put("vals", vat_lie);
+			}
 			weidusLieObj.put("dimdesc", weiduLieObj.text);
 			weidusLieObj.put("colname", weiduLieObj.col_name);
 			weidusLieObj.put("type", weiduLieObj.dim_type);
@@ -458,6 +488,54 @@ public class ConditionAcitivity extends Activity implements
 		objTable.put("params", WeiduArray);
 		obj.put("chartJson", objTable);
 		return obj.toString();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		switch (parent.getId()) {
+		case R.id.ConditionFragment_Weidu_hang_listview:
+			shaixuan_isHand=true;
+			WeiduBean wb=weidusHangShow.get(position);
+			head_text=wb.text;
+			sendShaixuan(wb.col_id, wb.tid);
+			break;
+		case R.id.ConditionFragment_Weidu_lie_listview:
+			shaixuan_isHand=false;
+			WeiduBean wb1=weidusLieShow.get(position);
+			head_text=wb1.text;
+			sendShaixuan(wb1.col_id, wb1.tid);
+			break;
+		}
+
+	}
+	private String head_text;
+	private boolean shaixuan_isHand;
+	private String shaixuan="";
+	private String vat_hang,vat_lie;
+	private void sendShaixuan(int dimId,int tid){
+		LoadingDialog.createLoadingDialog(this);
+		ServerEngine serverEngine = new ServerEngine(this);
+		RequestVo rv = new RequestVo();
+		rv.context = this;
+		rv.functionPath = APIContext.shaixuan;
+		rv.parser = new ShaixuanParser();
+		rv.Type = APIContext.GET;
+		shaixuan = UUID.randomUUID().toString();
+		rv.uuId = shaixuan;
+		rv.isSaveToLocation = false;
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("dimId", dimId + "");
+		map.put("tid", tid + "");
+		rv.requestDataMap = map;
+		serverEngine.addTaskWithConnection(rv);
+	}
+	public void setShaixuan(String value){
+		if (shaixuan_isHand) {
+			vat_hang=value;
+		}else {
+			vat_lie=value;
+		}
 	}
 
 }
