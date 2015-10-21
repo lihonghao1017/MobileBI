@@ -61,7 +61,7 @@ public class TuLeidaParser extends BaseParser {
 						if (k>5)break;
 						JSONObject entryData = itemArray.getJSONObject(k);
 						yVals2.add(new Entry(entryData.getInt("value"),
-								entryData.getInt("xIndex")));
+								k));
 					}
 					RadarDataSet set1 = new RadarDataSet(yVals2,
 							itemData.getString("label"));

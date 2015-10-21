@@ -8,10 +8,6 @@ import org.json.JSONObject;
 
 import android.graphics.Color;
 
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -63,8 +59,7 @@ public class TuBingxingParser extends BaseParser {
 				for (int j = 0; j < headArray.length(); j++) {
 					if (j>5)break;
 					JSONObject yObj = headArray.getJSONObject(j);
-					yVals1.add(new Entry(yObj.getInt("value"), yObj
-							.getInt("index")));
+					yVals1.add(new Entry(yObj.getInt("value"), j));
 				}
 				JSONArray xArray = objdata.getJSONArray("xVals");
 				ArrayList<String> xVals = new ArrayList<String>();

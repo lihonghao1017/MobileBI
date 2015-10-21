@@ -64,7 +64,7 @@ public class TuZhuxingParser extends BaseParser {
 					for (int k = 0; k < itemArray.length(); k++) {
 						if (k>5)break;
 						JSONObject entryData = itemArray.getJSONObject(k);
-						yVals2.add(new BarEntry(entryData.getInt("value"), entryData.getInt("xIndex")));
+						yVals2.add(new BarEntry(entryData.getInt("value"), k));
 					}
 					BarDataSet set2 = new BarDataSet(yVals2, itemData.getString("label"));
 				        set2.setAxisDependency(AxisDependency.RIGHT);

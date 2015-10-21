@@ -71,7 +71,7 @@ public class TuParser extends BaseParser {
 					for (int k = 0; k < itemArray.length(); k++) {
 						if (k>5)break;
 						JSONObject entryData = itemArray.getJSONObject(k);
-						yVals2.add(new Entry(entryData.getInt("value"), entryData.getInt("xIndex")));
+						yVals2.add(new Entry(entryData.getInt("value"), k));
 					}
 					 LineDataSet set2 = new LineDataSet(yVals2, itemData.getString("label"));
 				        set2.setAxisDependency(AxisDependency.RIGHT);
